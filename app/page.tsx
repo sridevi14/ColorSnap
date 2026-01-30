@@ -153,8 +153,19 @@ export default function Home() {
         <footer className="border-t border-[var(--border-primary)] mt-16">
           <div className="max-w-6xl mx-auto px-6 py-8">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-[var(--text-muted)]">
-              <p>Built with Next.js, React, and Tailwind CSS</p>
-              <p>100% client-side • No data stored</p>
+            <p>Private by design — everything stays on your device</p>
+            <p>
+  Built by{" "}
+  <a
+    href="https://www.linkedin.com/in/sridevimanjuraja/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="hover:underline"
+  >
+    Sridevi
+  </a>
+</p>
+
             </div>
           </div>
         </footer>

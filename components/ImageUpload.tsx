@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface ImageUploadProps {
   onImageUpload: (imageData: string) => void;
@@ -15,6 +15,8 @@ export default function ImageUpload({ onImageUpload }: ImageUploadProps) {
   const [isLoadingUrl, setIsLoadingUrl] = useState(false);
   const [urlError, setUrlError] = useState("");
 
+
+  
   const handleFile = useCallback(
     (file: File) => {
       // Validate file type
@@ -131,6 +133,28 @@ export default function ImageUpload({ onImageUpload }: ImageUploadProps) {
     }
   }, [imageUrl, onImageUpload]);
 
+  useEffect(() => {
+    const handlePaste = (event: ClipboardEvent) => {
+      const items = event.clipboardData?.items;
+      if (!items) return;
+
+      // Convert DataTransferItemList to array to avoid iteration issue (ES2015+ or TS config)
+      Array.from(items).forEach((item) => {
+        if (item.type.startsWith("image/")) {
+          const file = item.getAsFile();
+          if (file) {
+            setActiveTab("upload"); // ensure correct tab
+            handleFile(file);       // reuse existing logic
+          }
+        }
+      }
+  )};
+  
+    window.addEventListener("paste", handlePaste);
+    return () => window.removeEventListener("paste", handlePaste);
+  }, [handleFile]);
+  
+
   return (
     <div className="w-full max-w-xl mx-auto animate-fade-in">
       {/* Tabs */}
@@ -204,7 +228,7 @@ export default function ImageUpload({ onImageUpload }: ImageUploadProps) {
             </h3>
             
             <p className="text-sm text-[var(--text-muted)] mb-5">
-              or click to browse from your computer
+            or click to browse, or paste from clipboard
             </p>
 
             <button className="btn-primary text-sm">
